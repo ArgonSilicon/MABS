@@ -29,7 +29,28 @@ bladder <- within(bladder,
 )
 bladder
 ```
+```{r, echo=TRUE}
+library(ggplot2)
+
+p1 <- ggplot(bladder, aes(x = X, y = n, shape = X))
+p2 <- p1 + geom_jitter()# + scale_shape_manual(values = c(2,1))
+#p3 <- p2 + theme_bw() + theme(panel.grid.major = element_blank(),
+#                              panel.grid.minor = element_blank())
+#p4 <- p3 + theme(legend.position = c(0.8, 0.8))
+#p5 <- p4 + scale_y_continuous(name = "Number of polyps") +
+#           scale_x_continuous(name = "Age of patient")
+p2
+```
+
 **Helpful hints:**
+
+```{r, echo=TRUE}
+bladder_fit1 <- glm(n ~ X, data = bladder,
+                   family = poisson(link = "log"))
+summary(bladder_fit1)
+exp(confint(bladder_fit1))
+summary(bladder_fit1)$dispersion # dispersion coefficient
+```
 
 Consider a *Poisson process*, in which the waiting times between successive events of interest (the tumors in this case) are independent
 and exponentially distributed with common mean, $1/\lambda$ (say).Then the number of events that occur up to time $t$ has a Poisson distribution with mean $\mu = \lambda t$. Here the parameter of real interest is the rate at which events occur, $\lambda$, and for a single explanatory variable, $x$, we can adopt a Poisson regression approach using the model
